@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyMatch — Tìm cách học hợp với bạn</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
+:root{
+  --ink:#17233c;--muted:#718096;--paper:#fffdf9;--line:#e8e4dc;
+  --a:#ff6f61;--b:#5b7cfa;--c:#39a88f;--d:#f2b84b;--e:#a66cff;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Be Vietnam Pro",sans-serif;color:var(--ink);
+background:#f6f3ee;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;border-radius:50%;filter:blur(2px);z-index:-1}
+body:before{width:420px;height:420px;background:#ffe2dc;top:-160px;left:-130px}
+body:after{width:500px;height:500px;background:#e4e9ff;right:-190px;bottom:-200px}
+.shell{width:min(900px,94vw);margin:30px auto 45px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.logo{font-weight:800;letter-spacing:.5px}.logo span{color:var(--a)}
+.badge{font-size:12px;color:#667085;background:#fff;border:1px solid var(--line);padding:8px 12px;border-radius:999px}
+.card{background:rgba(255,253,249,.96);border:1px solid #fff;border-radius:30px;
+box-shadow:0 20px 60px rgba(35,42,60,.10);overflow:hidden}
+.hero{padding:55px 54px 48px;text-align:center}
+.kicker{text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:800;color:var(--a);margin-bottom:15px}
+h1{font-family:"Playfair Display",serif;font-size:clamp(38px,6vw,62px);line-height:1.02;margin:0 auto 18px;max-width:720px}
+.hero p{max-width:620px;margin:0 auto;color:var(--muted);line-height:1.75;font-size:16px}
+.start{margin-top:30px;border:0;border-radius:16px;padding:16px 28px;background:var(--ink);color:#fff;font:700 16px "Be Vietnam Pro";cursor:pointer;box-shadow:0 8px 20px #17233c22}
+.start:hover{transform:translateY(-2px)}
+.features{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:25px}
+.chip{background:#fff;border:1px solid var(--line);padding:9px 13px;border-radius:999px;font-size:12px;color:#5c6678}
+.quiz{padding:35px 45px 42px}
+.meta{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:12px}
+.progress{height:8px;background:#eeeae3;border-radius:20px;overflow:hidden;margin-bottom:34px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--e));border-radius:20px;transition:.35s}
+.qtag{font-size:12px;color:var(--a);font-weight:800;letter-spacing:1.3px;text-transform:uppercase}
+.question{font-size:25px;line-height:1.4;font-weight:700;margin:10px 0 25px;max-width:760px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.option{min-height:84px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:17px;padding:16px 18px;
+font:500 15px/1.5 "Be Vietnam Pro";color:var(--ink);cursor:pointer;transition:.2s;position:relative}
+.option:hover{border-color:#bbc2d0;transform:translateY(-2px);box-shadow:0 7px 18px #17233c10}
+.option .letter{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:9px;background:#f2f0eb;margin-right:9px;font-weight:800;font-size:12px;color:#667085}
+.option.selected{border:2px solid var(--ink);padding:15px 17px;background:#f8f7f3}
+.option.selected .letter{background:var(--ink);color:#fff}
+.actions{display:flex;justify-content:flex-end;margin-top:24px}
+.next{border:0;border-radius:14px;padding:13px 21px;background:var(--ink);color:#fff;font:700 15px "Be Vietnam Pro";cursor:pointer}
+.next:disabled{opacity:.35;cursor:not-allowed}
+.result{padding:48px 45px}
+.result-head{text-align:center}.result-head .kicker{color:var(--c)}
+.result h2{font-family:"Playfair Display",serif;font-size:44px;margin:5px 0 10px}
+.result-intro{color:var(--muted);line-height:1.7;max-width:620px;margin:0 auto 25px;text-align:center}
+.match{background:#17233c;color:#fff;border-radius:24px;padding:28px;text-align:center;margin:20px 0 25px}
+.match .tiny{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;opacity:.7}
+.match-name{font-family:"Playfair Display",serif;font-size:38px;margin:9px 0}
+.match p{margin:0 auto;max-width:600px;line-height:1.65;color:#e6e9ef}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.result-box{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff}
+.result-box h3{font-size:14px;margin:0 0 8px}.result-box p{margin:0;color:#687386;font-size:13px;line-height:1.6}
+.restart{width:100%;margin-top:22px;border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:14px;padding:14px;font:700 15px "Be Vietnam Pro";cursor:pointer}
+.restart:hover{background:var(--ink);color:#fff}
+.hidden{display:none!important}
+.footer{text-align:center;color:#9aa1ad;font-size:11px;margin-top:16px}
+@media(max-width:650px){
+ .hero,.quiz,.result{padding:35px 22px}
+ .options,.grid{grid-template-columns:1fr}
+ .question{font-size:21px}.top{padding:0 3px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="top"><div class="logo">Study<span>Match</span></div><div class="badge">15 câu · 3–5 phút</div></div>
+  <div class="card">
+    <section id="home" class="hero">
+      <div class="kicker">A little experiment for your study habits</div>
+      <h1>Bạn học hiệu quả nhất theo cách nào?</h1>
+      <p>Không có đáp án đúng hay sai. Hãy chọn điều <b>giống bạn nhất</b> trong những tình huống học tập quen thuộc. Kết quả cuối cùng sẽ bật mí <b>một phương pháp học</b> phù hợp nhất với bạn.</p>
+      <button class="start" onclick="begin()">Bắt đầu khám phá →</button>
+      <div class="features">
+        <span class="chip">Không có câu hỏi “đáp án lộ”</span>
+        <span class="chip">Kết quả cá nhân hóa</span>
+        <span class="chip">Có thể làm lại</span>
+      </div>
+    </section>
+
+    <section id="quiz" class="quiz hidden">
+      <div class="meta"><span id="count">Câu 1 / 15</span><span id="percent">7%</span></div>
+      <div class="progress"><i id="bar"></i></div>
+      <div class="qtag">Một tình huống nhỏ</div>
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+      <div class="actions"><button class="next" id="next" disabled>Tiếp tục →</button></div>
+    </section>
+
+    <section id="result" class="result hidden">
+      <div class="result-head">
+        <div class="kicker">Your study match</div>
+        <h2>Kết quả đã có!</h2>
+        <p class="result-intro">Dựa trên lựa chọn của bạn ở 15 tình huống, đây là phương pháp có điểm phù hợp cao nhất. Bạn không cần ép mình học theo một “công thức” duy nhất — hãy dùng đây như điểm bắt đầu.</p>
+      </div>
+      <div class="match">
+        <div class="tiny">Phương pháp phù hợp nhất với bạn</div>
+        <div class="match-name" id="matchName"></div>
+        <p id="matchDesc"></p>
+      </div>
+      <div class="grid">
+        <div class="result-box"><h3>✨ Vì sao?</h3><p id="why"></p></div>
+        <div class="result-box"><h3>🚀 Thử ngay</h3><p id="try"></p></div>
+      </div>
+      <button class="restart" onclick="begin()">↻ Làm lại bài trắc nghiệm</button>
+    </section>
+  </div>
+  <div class="footer">StudyMatch · Kết quả mang tính định hướng, hãy thử nghiệm để tìm cách học thực sự hiệu quả với bạn.</div>
+</div>
+
+<script>
+const methods={
+  pomodoro:{
+    name:"Pomodoro · Học theo phiên",desc:"Bạn có xu hướng học tốt khi có nhịp độ rõ ràng: tập trung trong một khoảng thời gian vừa đủ rồi chủ động nghỉ. / You tend to study well with a clear rhythm of focused work and planned breaks.",
+    why:"Bạn thường hiệu quả hơn khi có cảm giác đang tiến từng chặng, thay vì phải học liên tục. / You tend to work better when progress is divided into manageable stages.",
+    try:"Bắt đầu với 25 phút tập trung + 5 phút nghỉ, rồi điều chỉnh theo bản thân. / Start with 25 minutes of focus + 5 minutes of rest, then adjust."
+  },
+  active:{
+    name:"Active Recall · Gợi nhớ chủ động",desc:"Bạn phù hợp với kiểu học buộc não phải tự lấy kiến thức ra thay vì chỉ đọc lại. / You fit a method that makes you retrieve knowledge instead of simply rereading.",
+    why:"Bạn có xu hướng tiến bộ khi tự trả lời và phát hiện chính xác phần mình còn quên. / You tend to improve when you test yourself and identify what you cannot recall.",
+    try:"Đóng tài liệu và viết hoặc nói ra những gì bạn nhớ trước khi kiểm tra lại. / Close your notes and recall the ideas before checking them."
+  },
+  spaced:{
+    name:"Spaced Repetition · Lặp lại ngắt quãng",desc:"Bạn phù hợp với việc gặp lại kiến thức ở những khoảng thời gian khác nhau thay vì học dồn. / You fit a method that revisits knowledge at spaced intervals instead of cramming.",
+    why:"Bạn có lợi thế khi biến việc ôn tập thành các lần ngắn lặp lại theo thời gian. / You benefit from turning review into short sessions spread over time.",
+    try:"Ôn lại sau 1 ngày, vài ngày rồi khoảng một tuần. / Review after 1 day, a few days, then about a week later."
+  },
+  feynman:{
+    name:"Feynman Technique · Phương pháp Feynman",desc:"Bạn học sâu hơn khi biến kiến thức phức tạp thành lời giải thích đơn giản. / You learn deeply by turning complex ideas into simple explanations.",
+    why:"Diễn đạt bằng ngôn ngữ của mình giúp bạn phát hiện những phần còn mơ hồ. / Explaining in your own words reveals gaps in understanding.",
+    try:"Giải thích một khái niệm như đang dạy người mới. / Explain one concept as if teaching a beginner."
+  },
+  mind:{
+    name:"Mind Mapping · Sơ đồ tư duy",desc:"Bạn học tốt khi nhìn thấy cấu trúc, từ khóa và mối quan hệ giữa các ý. / You learn well when you can see structure, keywords and connections.",
+    why:"Bức tranh tổng thể giúp bạn định vị thông tin và nhớ cách các phần liên quan. / A big-picture view helps you organize and connect information.",
+    try:"Đặt chủ đề ở trung tâm rồi phát triển các nhánh bằng từ khóa và ví dụ. / Put the topic in the center and build branches with keywords and examples."
+  }
+};
+
+/*
+  Mỗi lựa chọn có một vector điểm ẩn cho 5 phương pháp.
+  Vì vậy không có lựa chọn nào “lộ” phương pháp tương ứng.
+*/
+const Q=[
+{q:"Bạn có một buổi chiều khá rảnh để học. Bạn thường thấy dễ bắt đầu nhất khi… / You have a free afternoon to study. You find it easiest to start when…",o:[
+["Biết trước buổi học gồm những chặng nào. / You know the session has clear stages.","pom"],
+["Có một cách để kiểm tra mình thật sự nhớ gì. / You can check what you actually remember.","active"],
+["Biết hôm nay nên ôn lại phần nào. / You know what should be reviewed today.","spaced"],
+["Có thể biến phần khó thành lời giải thích dễ hiểu. / You can turn a difficult topic into a simple explanation.","feynman"],
+["Nhìn thấy toàn bộ chủ đề và các mối liên hệ. / You can see the whole topic and its connections.","mind"]]},
+{q:"Khi gặp một chương rất dài, bạn có xu hướng… / When a chapter is very long, you tend to…",o:[
+["Chia nó thành vài phiên học vừa sức. / Divide it into manageable study sessions.","pom"],
+["Đọc một phần rồi tự nhớ lại nội dung chính. / Read a section and recall the key ideas.","active"],
+["Đánh dấu phần cần quay lại trong những ngày tới. / Mark parts to revisit over the next few days.","spaced"],
+["Thử nói lại nội dung bằng ngôn ngữ của mình. / Try explaining it in your own words.","feynman"],
+["Tóm tắt các ý thành một hệ thống từ khóa. / Turn the ideas into a keyword system.","mind"]]},
+{q:"Bạn vừa học xong một bài nhưng chưa chắc mình hiểu. Bạn sẽ… / You finished a lesson but are unsure you understand it. You would…",o:[
+["Nghỉ một chút rồi quay lại với một phiên học mới. / Take a short break and return for another session.","pom"],
+["Đóng tài liệu và thử viết những gì mình còn nhớ. / Close the notes and write what you remember.","active"],
+["Để bài đó vào kế hoạch ôn lại sau. / Put it into a later review plan.","spaced"],
+["Tự giảng lại bài như đang nói với người khác. / Explain the lesson as if teaching someone.","feynman"],
+["Vẽ nhanh sơ đồ để xem các ý liên quan thế nào. / Sketch a map to see how the ideas connect.","mind"]]},
+{q:"Điều gì thường khiến một buổi học của bạn kém hiệu quả? / What usually makes your study session less effective?",o:[
+["Tôi ngồi quá lâu mà không nghỉ. / I study for too long without a break.","pom"],
+["Tôi đọc nhiều nhưng ít tự kiểm tra. / I read a lot but rarely test myself.","active"],
+["Tôi học một lần rồi để quá lâu mới xem lại. / I study once and wait too long to review.","spaced"],
+["Tôi biết từ khóa nhưng chưa hiểu bản chất. / I know the terms but not the underlying idea.","feynman"],
+["Thông tin quá rời rạc và khó liên kết. / The information feels disconnected.","mind"]]},
+{q:"Nếu phải chuẩn bị cho bài kiểm tra sau 10 ngày, bạn thích… / If you have a test in 10 days, you would prefer to…",o:[
+["Chia thời gian thành các phiên học rõ ràng. / Divide the time into clear study sessions.","pom"],
+["Thường xuyên tự làm câu hỏi mà không nhìn đáp án. / Regularly answer questions without looking at the answers.","active"],
+["Ôn lại kiến thức theo nhiều mốc trong 10 ngày. / Review the material at several points over the 10 days.","spaced"],
+["Tự giải thích các chủ đề khó cho đến khi thật rõ. / Explain difficult topics until they become clear.","feynman"],
+["Tạo một sơ đồ tổng hợp trước rồi đi sâu vào từng phần. / Make an overview map before going into details.","mind"]]},
+{q:"Khi ghi chú, kiểu nào gần với bạn nhất? / Which note-taking style feels most natural to you?",o:[
+["Ghi ngắn gọn để dễ chia thành từng phiên học. / Keep notes short so they fit into study sessions.","pom"],
+["Viết câu hỏi ở bên cạnh để tự trả lời sau. / Write questions beside the notes to answer later.","active"],
+["Đánh dấu ngày hoặc mốc để xem lại. / Mark dates or points for later review.","spaced"],
+["Viết lại ý bằng cách diễn đạt đơn giản. / Rewrite ideas in simple language.","feynman"],
+["Dùng nhánh, mũi tên và từ khóa. / Use branches, arrows and keywords.","mind"]]},
+{q:"Bạn nhớ một kiến thức lâu hơn khi… / You remember something longer when…",o:[
+["Bạn học nó trong những phiên tập trung vừa phải. / You learn it in manageable focused sessions.","pom"],
+["Bạn phải tự lấy kiến thức ra khỏi trí nhớ. / You have to retrieve it from memory.","active"],
+["Bạn gặp lại nó nhiều lần cách nhau một khoảng. / You revisit it several times with gaps between reviews.","spaced"],
+["Bạn có thể giải thích nó mà không cần đọc lại. / You can explain it without rereading.","feynman"],
+["Bạn biết nó liên kết với những ý nào khác. / You know what other ideas it connects to.","mind"]]},
+{q:"Khi một nhiệm vụ học tập có vẻ quá lớn, bạn thường… / When a study task feels overwhelming, you usually…",o:[
+["Đặt một khoảng thời gian ngắn để bắt đầu. / Set a short time block to begin.","pom"],
+["Chọn một phần rồi tự kiểm tra mình ngay. / Choose one part and test yourself.","active"],
+["Chia nội dung thành những lần ôn nhỏ trong nhiều ngày. / Spread small reviews across several days.","spaced"],
+["Chọn một khái niệm và cố giải thích nó thật đơn giản. / Pick one concept and explain it simply.","feynman"],
+["Vẽ mục tiêu ở giữa rồi tách thành các nhánh. / Put the goal in the center and branch it out.","mind"]]},
+{q:"Bạn đang học từ vựng. Cách nào nghe tự nhiên nhất? / You are learning vocabulary. Which approach feels most natural?",o:[
+["Học một lượng vừa phải rồi nghỉ. / Learn a manageable amount and take a break.","pom"],
+["Che nghĩa và tự nhớ lại trước. / Hide the meaning and recall it first.","active"],
+["Gặp lại từ vào những ngày khác nhau. / Revisit the words on different days.","spaced"],
+["Đặt từ vào câu và giải thích cách dùng. / Put the word in a sentence and explain its use.","feynman"],
+["Nhóm từ theo chủ đề và liên kết chúng. / Group words by topic and connect them.","mind"]]},
+{q:"Nếu phải học vào lúc hơi mệt, bạn muốn… / If you have to study while a little tired, you would rather…",o:[
+["Học ngắn rồi nghỉ để giữ sự tỉnh táo. / Study briefly and take breaks to stay alert.","pom"],
+["Chỉ làm vài câu hỏi để xem mình còn nhớ gì. / Do a few questions to see what you remember.","active"],
+["Ôn lại kiến thức quen thuộc thay vì nhồi bài mới. / Review familiar material instead of cramming new content.","spaced"],
+["Nói lại một ý chính bằng lời của mình. / Explain one key idea in your own words.","feynman"],
+["Nhìn một sơ đồ tổng hợp để gợi lại kiến thức. / Look at a summary map to reactivate knowledge.","mind"]]},
+{q:"Khi bạn làm sai một câu, phản ứng nào giống bạn nhất? / When you get a question wrong, which reaction is most like you?",o:[
+["Tôi ghi nhận lỗi rồi quay lại ở một phiên khác. / I note the mistake and return to it in another session.","pom"],
+["Tôi muốn thử lại mà không nhìn lời giải ngay. / I want to try again before seeing the solution.","active"],
+["Tôi đánh dấu lỗi để ôn lại sau vài ngày. / I mark the mistake for review a few days later.","spaced"],
+["Tôi muốn hiểu và nói được tại sao đáp án đúng. / I want to understand and explain why the answer is right.","feynman"],
+["Tôi muốn xem lỗi đó liên quan đến phần kiến thức nào. / I want to see which part of the topic the mistake connects to.","mind"]]},
+{q:"Khi chuẩn bị thuyết trình, bạn thường thích… / When preparing a presentation, you usually prefer to…",o:[
+["Chia thời gian chuẩn bị thành các chặng. / Divide preparation into focused stages.","pom"],
+["Tự đặt câu hỏi để kiểm tra mình có nhớ nội dung không. / Ask yourself questions to check your recall.","active"],
+["Ôn lại nội dung nhiều lần trước ngày trình bày. / Review the content several times before presenting.","spaced"],
+["Tập nói lại cho đến khi giải thích tự nhiên. / Practice explaining until it feels natural.","feynman"],
+["Sắp xếp nội dung thành sơ đồ trước khi làm slide. / Map the content before making slides.","mind"]]},
+{q:"Bạn có một tuần để hoàn thành một mục tiêu học tập. Điều gì quan trọng nhất với bạn? / You have one week to reach a study goal. What matters most?",o:[
+["Có nhịp học đều và không bị quá tải. / Keeping a steady rhythm without overload.","pom"],
+["Biết chắc mình đã nhớ được những gì. / Knowing exactly what you can recall.","active"],
+["Không để kiến thức bị quên giữa các ngày. / Preventing knowledge from fading between days.","spaced"],
+["Hiểu đủ sâu để tự giải thích. / Understanding deeply enough to explain it.","feynman"],
+["Nhìn được bức tranh tổng thể. / Seeing the big picture.","mind"]]},
+{q:"Bạn muốn biến một bài học thành thứ dễ nhớ hơn bằng cách… / You want to make a lesson easier to remember by…",o:[
+["Chia việc học thành những khoảng ngắn. / Divide studying into short periods.","pom"],
+["Tự đặt câu hỏi sau khi học. / Ask yourself questions after studying.","active"],
+["Lên lịch gặp lại nội dung theo thời gian. / Schedule spaced revisits.","spaced"],
+["Viết lại bài như đang giải thích cho một người mới. / Rewrite it as if explaining to a beginner.","feynman"],
+["Biến bài thành từ khóa, nhánh và liên kết. / Turn it into keywords, branches and connections.","mind"]]},
+{q:"Câu nào mô tả bạn gần nhất khi học? / Which statement describes you best when studying?",o:[
+["Tôi làm tốt khi có nhịp tập trung và nghỉ ngơi hợp lý. / I do well with a rhythm of focus and breaks.","pom"],
+["Tôi tiến bộ khi tự thử thách trí nhớ của mình. / I improve when I challenge my memory.","active"],
+["Tôi nhớ tốt hơn khi kiến thức được ôn lại đúng lúc. / I remember better when material is revisited at the right time.","spaced"],
+["Tôi hiểu rõ nhất khi có thể nói lại bằng lời của mình. / I understand best when I can explain in my own words.","feynman"],
+["Tôi thích nhìn kiến thức như một mạng lưới các ý tưởng. / I like seeing knowledge as a network of ideas.","mind"]]}
+];
+
+function hiddenWeights(qIndex, optionIndex){
+ const maps = [
+  [[4,1,0,0,2],[0,4,1,1,0],[0,1,4,0,1],[1,0,1,4,1],[1,1,0,1,4]],
+  [[3,0,0,1,2],[1,4,1,0,0],[0,1,4,1,1],[1,1,0,4,1],[0,1,1,1,4]],
+  [[4,0,0,1,1],[0,4,1,1,0],[0,1,4,0,1],[1,1,0,4,1],[1,1,1,0,4]],
+  [[4,0,0,1,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,1,0,0,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,0],[1,1,0,1,4]],
+  [[4,0,0,1,1],[0,4,1,1,0],[0,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,1,0,0,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,0,0,1,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,1,0,0,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,0,0,1,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,1,0,0,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,0,0,1,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,1,0,0,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,0,0,1,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]],
+  [[4,1,0,0,1],[0,4,1,1,0],[1,1,4,0,1],[1,1,0,4,1],[1,1,0,1,4]]
+ ];
+ return maps[qIndex][optionIndex];
+}
+
+const names=["pomodoro","active","spaced","feynman","mind"];
+let idx=0,choice=null,scores=[0,0,0,0,0];
+function begin(){
+ idx=0;choice=null;scores=[0,0,0,0,0];
+ document.getElementById("home").classList.add("hidden");
+ document.getElementById("result").classList.add("hidden");
+ document.getElementById("quiz").classList.remove("hidden");
+ render(); window.scrollTo({top:0,behavior:"smooth"});
+}
+function render(){
+ choice=null;
+ const q=Q[idx];
+ document.getElementById("count").textContent=`Câu ${idx+1} / ${Q.length} · Question ${idx+1} / ${Q.length}`;
+ const pct=Math.round((idx+1)/Q.length*100);
+ document.getElementById("percent").textContent=pct+"%";
+ document.getElementById("bar").style.width=pct+"%";
+ document.getElementById("question").textContent=q.q;
+ const box=document.getElementById("options");box.innerHTML="";
+ q.o.forEach((x,n)=>{
+   const b=document.createElement("button");b.className="option";
+   b.innerHTML=`<span class="letter">${String.fromCharCode(65+n)}</span>${x[0]}`;
+   b.onclick=()=>{choice=n;document.querySelectorAll(".option").forEach(z=>z.classList.remove("selected"));b.classList.add("selected");document.getElementById("next").disabled=false};
+   box.appendChild(b);
+ });
+ document.getElementById("next").disabled=true;
+ document.getElementById("next").textContent=idx===Q.length-1?"Xem kết quả · See result →":"Tiếp tục · Continue →";
+}
+document.getElementById("next").onclick=()=>{
+ if(choice===null)return;
+ const weights=hiddenWeights(idx,choice);
+ for(let j=0;j<5;j++)scores[j]+=weights[j];
+ idx++;
+ if(idx<Q.length)render();else finish();
+ window.scrollTo({top:0,behavior:"smooth"});
+};
+function finish(){
+ const best=Math.max(...scores);
+ let bi=scores.indexOf(best);
+ const m=methods[names[bi]];
+ document.getElementById("quiz").classList.add("hidden");
+ document.getElementById("result").classList.remove("hidden");
+ document.getElementById("matchName").textContent=m.name;
+ document.getElementById("matchDesc").textContent=m.desc;
+ document.getElementById("why").textContent=m.why;
+ document.getElementById("try").textContent=m.try;
+}
+
+</script>
+</body>
+</html>
